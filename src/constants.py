@@ -1,6 +1,7 @@
 # Commands
 PING_COMMAND = "ping"
 PING_COUNT_OPTION = "-c"
+PING_QUIET_COMMAND = "-q"
 
 # Prefixes and suffixes
 WWW_PREFIX = "www."
