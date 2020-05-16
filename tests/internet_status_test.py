@@ -1,11 +1,25 @@
 
 from __future__ import annotations
 import unittest
+from mock import patch
 
-from src.ping import Ping
-from src.constants import (
-)
-from tests.fake_test_data.ping_test_data import (
+from src.internet_status import InternetStatus
+from tests.fake_test_data.internet_status_test_data import (
+    APPLE_DESTINATION_HOST_UNREACHABLE_RESPONSE,
+    APPLE_PACKET_LOSS_RESPONSE,
+    APPLE_ROUND_TRIP_TIME_ERROR_RESPONSE,
+    APPLE_SUCCESSFUL_RESPONSE,
+    APPLE_UNABLE_TO_RESOLVE_HOST_RESPONSE,
+    GOOGLE_DESTINATION_HOST_UNREACHABLE_RESPONSE,
+    GOOGLE_PACKET_LOSS_RESPONSE,
+    GOOGLE_ROUND_TRIP_TIME_ERROR_RESPONSE,
+    GOOGLE_SUCCESSFUL_RESPONSE,
+    GOOGLE_UNABLE_TO_RESOLVE_HOST_RESPONSE,
+    LOCAL_ROUTER_DESTINATION_HOST_UNREACHABLE_RESPONSE,
+    LOCAL_ROUTER_PACKET_LOSS_RESPONSE,
+    LOCAL_ROUTER_ROUND_TRIP_TIME_ERROR_RESPONSE,
+    LOCAL_ROUTER_SUCCESSFUL_RESPONSE,
+    LOCAL_ROUTER_UNABLE_TO_RESOLVE_HOST_RESPONSE
 )
 
 
@@ -13,80 +27,149 @@ class InternetStatusTest(unittest.TestCase):
     def setUp(self: InternetStatusTest) -> None:
         self.internet_status = InternetStatus()
 
-    def tearDown(self: PingTest) -> None:
+    def tearDown(self: InternetStatusTest) -> None:
         pass
 
-    def test_run_ping_tests_with_success(self: PingTest) -> None:
+    @patch('src.ping.Ping.ping_host_and_return_parsed_response')
+    def test_run_ping_tests_with_success(
+            self: InternetStatusTest,
+            mock_response: dict) -> None:
+        mock_response.side_effect = [
+            GOOGLE_SUCCESSFUL_RESPONSE
+        ]
         pass
 
+    @patch('src.ping.Ping.ping_host_and_return_parsed_response')
     def test_run_ping_tests_with_success_in_second_host(
-            self: PingTest) -> None:
+            self: InternetStatusTest,
+            mock_response: dict) -> None:
+        mock_response.side_effect = [
+            GOOGLE_PACKET_LOSS_RESPONSE,
+            APPLE_SUCCESSFUL_RESPONSE
+        ]
         pass
 
-    def test_run_ping_tests_with_local_router_error(self: PingTest) -> None:
+    @patch('src.ping.Ping.ping_host_and_return_parsed_response')
+    def test_run_ping_tests_with_local_router_error(
+            self: InternetStatusTest,
+            mock_response: dict) -> None:
+        mock_response.side_effect = [
+            GOOGLE_UNABLE_TO_RESOLVE_HOST_RESPONSE,
+            APPLE_UNABLE_TO_RESOLVE_HOST_RESPONSE,
+            LOCAL_ROUTER_UNABLE_TO_RESOLVE_HOST_RESPONSE
+        ]
         pass
 
-    def test_run_ping_tests_with_resolve_host_error(self: PingTest) -> None:
+    @patch('src.ping.Ping.ping_host_and_return_parsed_response')
+    def test_run_ping_tests_with_resolve_host_error(
+            self: InternetStatusTest,
+            mock_response: dict) -> None:
+        mock_response.side_effect = [
+            GOOGLE_UNABLE_TO_RESOLVE_HOST_RESPONSE,
+            APPLE_UNABLE_TO_RESOLVE_HOST_RESPONSE,
+            LOCAL_ROUTER_SUCCESSFUL_RESPONSE
+        ]
         pass
 
-    def test_run_ping_tests_with_packet_loss_error(self: PingTest) -> None:
+    @patch('src.ping.Ping.ping_host_and_return_parsed_response')
+    def test_run_ping_tests_with_packet_loss_error(
+            self: InternetStatusTest,
+            mock_response: dict) -> None:
+        mock_response.side_effect = [
+            GOOGLE_PACKET_LOSS_RESPONSE,
+            APPLE_PACKET_LOSS_RESPONSE,
+            LOCAL_ROUTER_SUCCESSFUL_RESPONSE
+        ]
         pass
 
-    def test_run_ping_tests_with_round_trip_time_error(self: PingTest) -> None:
+    @patch('src.ping.Ping.ping_host_and_return_parsed_response')
+    def test_run_ping_tests_with_round_trip_time_error(
+            self: InternetStatusTest,
+            mock_response: dict) -> None:
+        mock_response.side_effect = [
+            GOOGLE_ROUND_TRIP_TIME_ERROR_RESPONSE,
+            APPLE_ROUND_TRIP_TIME_ERROR_RESPONSE,
+            LOCAL_ROUTER_SUCCESSFUL_RESPONSE
+        ]
         pass
 
-    def test_run_ping_tests_with_multiple_error_types(self: PingTest) -> None:
-        pass
+    @patch('src.ping.Ping.ping_host_and_return_parsed_response')
+    def test_run_ping_tests_with_multiple_error_types(
+            self: InternetStatusTest,
+            mock_response: dict) -> None:
 
-    def test_check_if_ping_was_successful_with_success(self: PingTest) -> None:
-        pass
+        # Check first host is most severe
+        mock_response.side_effect = [
+            GOOGLE_UNABLE_TO_RESOLVE_HOST_RESPONSE,
+            APPLE_ROUND_TRIP_TIME_ERROR_RESPONSE,
+            LOCAL_ROUTER_SUCCESSFUL_RESPONSE
+        ]
 
-    def test_check_if_ping_was_successful_with_unable_to_resolve_host_error(
-            self: PingTest) -> None:
-        pass
+        # Check second host is most severe
+        mock_response.side_effect = [
+            GOOGLE_UNABLE_TO_RESOLVE_HOST_RESPONSE,
+            APPLE_ROUND_TRIP_TIME_ERROR_RESPONSE,
+            LOCAL_ROUTER_SUCCESSFUL_RESPONSE
+        ]
 
-    def test_check_if_ping_was_successful_with_packet_loss_error(
-            self: PingTest) -> None:
-        pass
-
-    def test_check_if_ping_was_successful_with_round_trip_time_error(
-            self: PingTest) -> None:
-        pass
-
-    def test_get_most_severe_error_with_local_router_error(
-            self: PingTest) -> None:
-        pass
-
-    def test_get_most_severe_error_with_resolve_host_error(
-            self: PingTest) -> None:
-        pass
-
-    def test_get_most_severe_error_with_packet_loss_error(
-            self: PingTest) -> None:
-        pass
-
-    def test_get_most_severe_error_with_round_trip_time_error(
-            self: PingTest) -> None:
-        pass
-
-    def test_get_most_severe_error_with_multiple_error_types(
-            self: PingTest) -> None:
+        # Check local router is most severe
+        mock_response.side_effect = [
+            GOOGLE_UNABLE_TO_RESOLVE_HOST_RESPONSE,
+            APPLE_ROUND_TRIP_TIME_ERROR_RESPONSE,
+            LOCAL_ROUTER_SUCCESSFUL_RESPONSE
+        ]
         pass
 
     def test_check_if_ping_was_successful_with_success(
-            self: PingTest) -> None:
+            self: InternetStatusTest) -> None:
         pass
 
     def test_check_if_ping_was_successful_with_unable_to_resolve_host_error(
-            self: PingTest) -> None:
+            self: InternetStatusTest) -> None:
         pass
 
     def test_check_if_ping_was_successful_with_packet_loss_error(
-            self: PingTest) -> None:
+            self: InternetStatusTest) -> None:
         pass
 
     def test_check_if_ping_was_successful_with_round_trip_time_error(
-            self: PingTest) -> None:
+            self: InternetStatusTest) -> None:
+        pass
+
+    def test_get_most_severe_error_with_local_router_error(
+            self: InternetStatusTest) -> None:
+        pass
+
+    def test_get_most_severe_error_with_resolve_host_error(
+            self: InternetStatusTest) -> None:
+        pass
+
+    def test_get_most_severe_error_with_packet_loss_error(
+            self: InternetStatusTest) -> None:
+        pass
+
+    def test_get_most_severe_error_with_round_trip_time_error(
+            self: InternetStatusTest) -> None:
+        pass
+
+    def test_get_most_severe_error_with_multiple_error_types(
+            self: InternetStatusTest) -> None:
+        pass
+
+    def test_check_if_ping_was_successful_with_success(
+            self: InternetStatusTest) -> None:
+        pass
+
+    def test_check_if_ping_was_successful_with_unable_to_resolve_host_error(
+            self: InternetStatusTest) -> None:
+        pass
+
+    def test_check_if_ping_was_successful_with_packet_loss_error(
+            self: InternetStatusTest) -> None:
+        pass
+
+    def test_check_if_ping_was_successful_with_round_trip_time_error(
+            self: InternetStatusTest) -> None:
         pass
 
 
