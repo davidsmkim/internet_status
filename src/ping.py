@@ -4,7 +4,13 @@ import subprocess
 from src.constants import (
     PING_COMMAND,
     PING_COUNT_OPTION,
-    PING_QUIET_COMMAND
+    PING_QUIET_COMMAND,
+    RESPONSE_KEY_HOST,
+    RESPONSE_KEY_NUM_PACKETS_SENT,
+    RESPONSE_KEY_PACKET_LOSS_PERCENT,
+    RESPONSE_KEY_MAX_ROUND_TRIP_TIME,
+    RESPONSE_KEY_AVERAGE_ROUND_TRIP_TIME,
+    RESPONSE_KEY_ABLE_TO_RESOLVE_HOST
 )
 
 
@@ -47,8 +53,8 @@ class Ping:
         response.
         '''
         parsed_ping_dict = {
-            'host': url,
-            'able_to_resolve_host': False
+            RESPONSE_KEY_HOST: url,
+            RESPONSE_KEY_ABLE_TO_RESOLVE_HOST: False
         }
         split_ping_response = response.splitlines()
 
@@ -57,7 +63,7 @@ class Ping:
         if not ping_was_able_to_resolve_host:
             return parsed_ping_dict
 
-        parsed_ping_dict['able_to_resolve_host'] = True
+        parsed_ping_dict[RESPONSE_KEY_ABLE_TO_RESOLVE_HOST] = True
         # Parse appropriate metrics and update parsed_ping_dict
         ping_summary_response = split_ping_response[-2]
         self.parse_ping_summary_and_update_parsed_ping_dict(
@@ -81,12 +87,12 @@ class Ping:
 
         # Get packets transmitted
         packets_transmitted_data = split_ping_summary[0]
-        parsed_ping_dict['num_packets_sent'] = \
+        parsed_ping_dict[RESPONSE_KEY_NUM_PACKETS_SENT] = \
             int(packets_transmitted_data.split(' ')[0])
 
         # Get packet loss percentage
         packet_loss_data = split_ping_summary[2]
-        parsed_ping_dict['packet_loss_percent'] = \
+        parsed_ping_dict[RESPONSE_KEY_PACKET_LOSS_PERCENT] = \
             float(packet_loss_data.split('%')[0])
 
     def parse_ping_timing_and_update_parsed_ping_dict(
@@ -102,11 +108,11 @@ class Ping:
         split_ping_timing = split_ping_timing[1].split('/')
 
         # Get average timing
-        parsed_ping_dict['average_round_trip_time'] = \
+        parsed_ping_dict[RESPONSE_KEY_AVERAGE_ROUND_TRIP_TIME] = \
             float(split_ping_timing[1])
 
         # Get max timing
-        parsed_ping_dict['max_round_trip_time'] = \
+        parsed_ping_dict[RESPONSE_KEY_MAX_ROUND_TRIP_TIME] = \
             float(split_ping_timing[2])
 
     def determine_if_able_to_resolve_host(

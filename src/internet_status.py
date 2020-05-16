@@ -8,10 +8,13 @@ from src.constants import (
     LOCAL_ROUTER_ERROR,
     MAX_ACCEPTABLE_PACKET_LOSS,
     MAX_ACCEPTABLE_AVERAGE_ROUND_TRIP_TIME,
-    DESTINATION_HOST_UNREACHABLE,
     PACKET_LOSS,
     PACKET_LOSS_ERROR,
     RESOLVE_HOST_ERROR,
+    RESPONSE_KEY_PACKET_LOSS_PERCENT,
+    RESPONSE_KEY_AVERAGE_ROUND_TRIP_TIME,
+    RESPONSE_KEY_ABLE_TO_RESOLVE_HOST,
+    RESPONSE_KEY_ERROR,
     ROUND_TRIP_TIME_ERROR,
     UNABLE_TO_RESOLVE_HOST,
     UNACCEPTABLE_ROUND_TRIP_TIME
@@ -78,50 +81,78 @@ class InternetStatus():
             if not ping_to_local_router_was_successful:
                 error = LOCAL_ROUTER_ERROR
             else:
-                error = self.get_most_severe_error_and_compile_message(
+                error_message = self.get_most_severe_error_and_compile_message(
                     ping_test_results)
         if error:
-            logger.log(start_time, error)
+            logger.log(start_time, error_message)
 
     def get_most_severe_error_and_compile_message(
             self: InternetStatus,
             ping_test_results: dict) -> str:
-        error = None
-        for host, parsed_host_response in ping_test_results.items():
-            # TODO: do this
-            pass
 
+        # Determine most severe error
+        error_precedence = [
+            LOCAL_ROUTER_ERROR,
+            RESOLVE_HOST_ERROR,
+            PACKET_LOSS_ERROR,
+            ROUND_TRIP_TIME_ERROR
+        ]
+
+        most_severe_error = None
+        additional_error_data = None
+        for parsed_host_response in ping_test_results.values():
+            current_error = parsed_host_response[RESPONSE_KEY_ERROR]
+            if current_error in error_precedence and \
+                (most_severe_error is None or
+                    error_precedence.index(most_severe_error) >
+                    error_precedence.index(current_error)):
+                most_severe_error = current_error
+
+                if most_severe_error == PACKET_LOSS_ERROR:
+                    additional_error_data = parsed_host_response[
+                            RESPONSE_KEY_PACKET_LOSS_PERCENT]
+                elif most_severe_error == ROUND_TRIP_TIME_ERROR:
+                    additional_error_data = parsed_host_response[
+                            RESPONSE_KEY_AVERAGE_ROUND_TRIP_TIME]
+
+        # Add numeric data for packet loss and round trip time errors
+        if most_severe_error == PACKET_LOSS_ERROR or \
+                most_severe_error == ROUND_TRIP_TIME_ERROR:
+            most_severe_error = str(additional_error_data) + most_severe_error
+
+        return most_severe_error
 
     def check_if_ping_was_successful(
             self: InternetStatus,
             parsed_host_response: dict) -> bool:
 
         if not self.check_if_ping_resolve_host(parsed_host_response):
-            parsed_host_response['error'] = UNABLE_TO_RESOLVE_HOST
+            parsed_host_response[RESPONSE_KEY_ERROR] = UNABLE_TO_RESOLVE_HOST
             return False
 
         elif not self.check_if_ping_packet_loss_acceptable(
                 parsed_host_response):
-            parsed_host_response['error'] = PACKET_LOSS
+            parsed_host_response[RESPONSE_KEY_ERROR] = PACKET_LOSS
             return False
 
         elif not self.check_if_ping_round_trip_time_acceptable(
                 parsed_host_response):
-            parsed_host_response['error'] = UNACCEPTABLE_ROUND_TRIP_TIME
+            parsed_host_response[RESPONSE_KEY_ERROR] = \
+                UNACCEPTABLE_ROUND_TRIP_TIME
             return False
 
-        parsed_host_response['error'] = ''
+        parsed_host_response[RESPONSE_KEY_ERROR] = ''
         return True
 
     def check_if_ping_resolve_host(
             self: InternetStatus,
             parsed_host_response: dict) -> bool:
-        return parsed_host_response['able_to_resolve_host']
+        return parsed_host_response[RESPONSE_KEY_ABLE_TO_RESOLVE_HOST]
 
     def check_if_ping_packet_loss_acceptable(
             self: InternetStatus,
             parsed_host_response: dict) -> bool:
-        if (parsed_host_response['packet_loss_percent'] >
+        if (parsed_host_response[RESPONSE_KEY_PACKET_LOSS_PERCENT] >
                 MAX_ACCEPTABLE_PACKET_LOSS):
             return False
         return True
@@ -129,7 +160,7 @@ class InternetStatus():
     def check_if_ping_round_trip_time_acceptable(
             self: InternetStatus,
             parsed_host_response: dict) -> bool:
-        if (parsed_host_response['average_round_trip_time'] >
+        if (parsed_host_response[RESPONSE_KEY_AVERAGE_ROUND_TRIP_TIME] >
                 MAX_ACCEPTABLE_AVERAGE_ROUND_TRIP_TIME):
             return False
         return True
