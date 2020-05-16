@@ -20,7 +20,7 @@ class Ping:
         {
             host: 'www.google.com',
             num_packets_sent: 10,
-            packet_loss_percent: 5.0%,
+            packet_loss_percent: 5.0,
             max_round_trip_time: 3.723,
             average_round_trip_time: 2.123
             able_to_resolve_host: True

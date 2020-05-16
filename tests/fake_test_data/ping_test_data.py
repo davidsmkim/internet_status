@@ -18,7 +18,7 @@ round-trip min/avg/max/stddev = 38.466/38.466/38.466/0.000 ms
 UNABLE_TO_RESOLVE_HOST_RESPONSE = \
     'ping: cannot resolve www.google.com: Unknown host'
 
-DESTINATION_HOST_UNREACHABLE = '''
+DESTINATION_HOST_UNREACHABLE_RESPONSE = '''
 PING www.google.com (216.58.194.196): 56 data bytes
 92 bytes from 73.162.229.233: Destination Host Unreachable
 Vr HL TOS  Len   ID Flg  off TTL Pro  cks      Src      Dst
