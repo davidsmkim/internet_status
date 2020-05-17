@@ -20,8 +20,8 @@ LOCAL_ROUTER = '192.168.86.1'
 MAX_ACCEPTABLE_PACKET_LOSS = 3
 MAX_ACCEPTABLE_AVERAGE_ROUND_TRIP_TIME = 40
 
-# Local Router error
-LOCAL_ROUTER_ERROR_MESSAGE = 'returned non-zero exit status'
+# Command exit error
+COMMAND_EXIT_ERROR_MESSAGE = 'returned non-zero exit status'
 
 # Errors consts
 DESTINATION_HOST_UNREACHABLE = 'destination host unreachable'

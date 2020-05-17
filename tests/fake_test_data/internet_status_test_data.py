@@ -100,6 +100,6 @@ PING 192.168.86.1 (192.168.86.1): 56 data bytes
 round-trip min/avg/max/stddev = 100/100/100/0.000 ms
 '''
 
-LOCAL_ROUTER_ISSUE_RESPONSE = \
+COMMAND_EXIT_ISSUE_RESPONSE = \
     "Command '['ping', '-c', '10', '-q', '192.168.86.1']' returned " + \
     "non-zero exit status 2."

@@ -1,4 +1,5 @@
 from __future__ import annotations
+from typing import List
 
 from src.constants import (
     APPLE_HOSTNAME,
@@ -30,15 +31,26 @@ from src.logger import logger
 class InternetStatus():
 
     def run_internet_status_check(self: InternetStatus) -> None:
-        self.run_ping_tests()
+        ping = Ping()
 
-    def run_ping_tests(self: InternetStatus) -> None:
+        google_url = create_url(GOOGLE_HOSTNAME, COM_SUFFIX)
+        apple_url = create_url(APPLE_HOSTNAME, COM_SUFFIX)
+        external_host_list = [google_url, apple_url]
+
+        while True:
+            self.run_ping_tests(ping, external_host_list)
+
+    def run_ping_tests(
+            self: InternetStatus,
+            ping: Ping,
+            external_host_list: [List[str]]) -> None:
         '''
-        Runs a ping test against www.google.com, www.apple.com, and local
-        router.  The ping test starts with the local router to make sure we can
-        connect to it properly.  Afterwards, we move to www.google.com and
-        only continues to the next host if there is an issue with pinging the
-        current host.
+        Runs a ping test against the provided external_host_list and local
+        router.  The ping test starts with www.google.com and only continues to
+        the next host if there is an issue with pinging the current host.
+
+        If we are unable to successfully ping external hosts, we check the
+        connection to the local router to see if an issue exists there.
 
         If there any issues (unable to resolve host, packet loss, high latency)
         are present, the issue is logged and timestamped.  If multiple errors
@@ -50,24 +62,28 @@ class InternetStatus():
         50 ms average round trip time
 
         Example log entries:
-        12/31/18@17:41:00 - Cannot connect to local router: Unable to resolve host
+        12/31/18@17:41:00 - Cannot connect to local router
         12/31/18@17:41:00 - Cannot connect to internet: Unable to resolve host
         12/31/18@17:41:00 - 30% packet loss
         12/31/18@17:41:00 - 50 ms average round trip time
         '''
+
         ping_test_results = {}
-        ping = Ping()
+        start_time = get_datetime()
+        error = None
 
-        google_url = create_url(GOOGLE_HOSTNAME, COM_SUFFIX)
-        apple_url = create_url(APPLE_HOSTNAME, COM_SUFFIX)
-        external_host_list = [google_url, apple_url]
+        # Check if able to successfully ping external hosts
+        for host in external_host_list:
+            parsed_host_response = \
+                ping.ping_host_and_return_parsed_response(host, 10)
+            ping_test_results[host] = parsed_host_response
+            ping_to_external_host_was_successful = \
+                self.check_if_ping_was_successful(parsed_host_response)
+            if ping_to_external_host_was_successful:
+                break
 
-        while True:
-            # Clear any previous iteration data and get new datetime
-            ping_test_results.clear()
-            start_time = get_datetime()
-
-            # Check local router
+        # Check local router
+        if not ping_to_external_host_was_successful:
             parsed_router_response = \
                 ping.ping_host_and_return_parsed_response(LOCAL_ROUTER, 10)
             ping_test_results[LOCAL_ROUTER] = parsed_router_response
@@ -76,27 +92,13 @@ class InternetStatus():
 
             if not ping_to_local_router_was_successful:
                 error = LOCAL_ROUTER_ERROR
-                logger.log(start_time, error)
-                continue
-
-            # Check if able to successfully ping external hosts
-            for host in external_host_list:
-                parsed_host_response = \
-                    ping.ping_host_and_return_parsed_response(host, 10)
-                ping_test_results[host] = parsed_host_response
-                ping_to_external_host_was_successful = \
-                    self.check_if_ping_was_successful(parsed_host_response)
-                if ping_to_external_host_was_successful:
-                    break
-
-            # Check final ping statuses
-            error = None
-            if not ping_to_external_host_was_successful:
-                if not ping_to_local_router_was_successful:
-                    error = LOCAL_ROUTER_ERROR
-                else:
+            else:
+                # Check final ping statuses
+                error = None
+                if not ping_to_external_host_was_successful:
                     error = self.get_most_severe_error_and_compile_message(
                         ping_test_results)
+
             if error:
                 logger.log(start_time, error)
 

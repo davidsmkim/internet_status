@@ -1,9 +1,9 @@
 from __future__ import annotations
 import subprocess
+from typing import List
 
 from src.constants import (
-    LOCAL_ROUTER,
-    LOCAL_ROUTER_ERROR_MESSAGE,
+    COMMAND_EXIT_ERROR_MESSAGE,
     PING_COMMAND,
     PING_COUNT_OPTION,
     PING_QUIET_COMMAND,
@@ -64,19 +64,16 @@ class Ping:
         }
         split_ping_response = response.splitlines()
 
-        if url == LOCAL_ROUTER:
-            # For local router, check if able to connect before moving on
-            able_to_connect_to_router = \
-                self.check_route_to_local_router_and_update_parsed_ping_dict(
-                    split_ping_response, parsed_ping_dict)
-            if not able_to_connect_to_router:
-                return parsed_ping_dict
-        else:
-            ping_was_able_to_resolve_host = \
-                self.determine_if_able_to_resolve_host(
-                    url, split_ping_response)
-            if not ping_was_able_to_resolve_host:
-                return parsed_ping_dict
+        ping_executed_successfully = \
+            self.check_if_ping_executed_successfully(split_ping_response)
+        if not ping_executed_successfully:
+            return parsed_ping_dict
+
+        ping_was_able_to_resolve_host = \
+            self.determine_if_able_to_resolve_host(
+                url, split_ping_response)
+        if not ping_was_able_to_resolve_host:
+            return parsed_ping_dict
 
         parsed_ping_dict[RESPONSE_KEY_ABLE_TO_RESOLVE_HOST] = True
 
@@ -131,6 +128,18 @@ class Ping:
         parsed_ping_dict[RESPONSE_KEY_MAX_ROUND_TRIP_TIME] = \
             float(split_ping_timing[2])
 
+    def check_if_ping_executed_successfully(
+            self: Ping,
+            split_ping_response: List[str]) -> bool:
+        '''
+        If not able to connect to local router, the ping fails and exits with
+        a message that contains the following in the string:
+        returned non-zero exit status
+        '''
+        if COMMAND_EXIT_ERROR_MESSAGE in split_ping_response[0]:
+            return False
+        return True
+
     def determine_if_able_to_resolve_host(
             self: Ping,
             url: str,
@@ -141,18 +150,5 @@ class Ping:
         are a single line.
         '''
         if len(split_ping_response) == 1:
-            return False
-        return True
-
-    def check_route_to_local_router_and_update_parsed_ping_dict(
-            self: Ping,
-            split_ping_response: str,
-            parsed_ping_dict: dict) -> bool:
-        '''
-        If not able to connect to local router, the ping fails and exits with
-        a message that contains the following in the string:
-        returned non-zero exit status
-        '''
-        if LOCAL_ROUTER_ERROR_MESSAGE in split_ping_response[0]:
             return False
         return True

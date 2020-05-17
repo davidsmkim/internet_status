@@ -11,6 +11,7 @@ from tests.fake_test_data.internet_status_test_data import (
     APPLE_ROUND_TRIP_TIME_ERROR_RESPONSE,
     APPLE_SUCCESSFUL_RESPONSE,
     APPLE_UNABLE_TO_RESOLVE_HOST_RESPONSE,
+    COMMAND_EXIT_ISSUE_RESPONSE,
     GOOGLE_DESTINATION_HOST_UNREACHABLE_RESPONSE,
     GOOGLE_PACKET_LOSS_RESPONSE,
     GOOGLE_ROUND_TRIP_TIME_ERROR_RESPONSE,
@@ -19,7 +20,6 @@ from tests.fake_test_data.internet_status_test_data import (
     LOCAL_ROUTER_PACKET_LOSS_RESPONSE,
     LOCAL_ROUTER_ROUND_TRIP_TIME_ERROR_RESPONSE,
     LOCAL_ROUTER_SUCCESSFUL_RESPONSE,
-    LOCAL_ROUTER_ISSUE_RESPONSE
 )
 
 
@@ -57,9 +57,9 @@ class InternetStatusTest(unittest.TestCase):
             self: InternetStatusTest,
             mock_response: dict) -> None:
         mock_response.side_effect = [
-            GOOGLE_UNABLE_TO_RESOLVE_HOST_RESPONSE,
-            APPLE_UNABLE_TO_RESOLVE_HOST_RESPONSE,
-            LOCAL_ROUTER_ISSUE_RESPONSE
+            COMMAND_EXIT_ISSUE_RESPONSE,
+            COMMAND_EXIT_ISSUE_RESPONSE,
+            COMMAND_EXIT_ISSUE_RESPONSE,
         ]
         pass
 
