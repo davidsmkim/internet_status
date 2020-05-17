@@ -30,5 +30,10 @@ Vr HL TOS  Len   ID Flg  off TTL Pro  cks      Src      Dst
 round-trip min/avg/max/stddev = 12.675/19.868/26.924/5.168 ms
 '''
 
+LOCAL_ROUTER_ISSUE_RESPONSE = \
+    "Command '['ping', '-c', '10', '-q', '192.168.86.1']' returned " + \
+    "non-zero exit status 2."
+
 # Hosts
 GOOGLE_HOST = 'www.google.com'
+LOCAL_ROUTER_HOST = '192.168.86.1'

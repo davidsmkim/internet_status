@@ -2,6 +2,8 @@ from __future__ import annotations
 import subprocess
 
 from src.constants import (
+    LOCAL_ROUTER,
+    LOCAL_ROUTER_ERROR_MESSAGE,
     PING_COMMAND,
     PING_COUNT_OPTION,
     PING_QUIET_COMMAND,
@@ -35,6 +37,11 @@ class Ping:
         dictionary has the same format but with only the 'host' and the
         'able_to_resolve_host' field, which is False.
         '''
+        response = self.ping_host(url, num_pings)
+        parsed_ping_dict = self.parse_ping_response(url, response)
+        return parsed_ping_dict
+
+    def ping_host(self: Ping, url: str, num_pings: int) -> str:
         try:
             response = subprocess.check_output(
                 [PING_COMMAND, PING_COUNT_OPTION, str(num_pings),
@@ -44,8 +51,7 @@ class Ping:
             )
         except subprocess.CalledProcessError as error:
             response = str(error)
-        parsed_ping_dict = self.parse_ping_response(url, response)
-        return parsed_ping_dict
+        return response
 
     def parse_ping_response(self: Ping, url: str, response: str) -> dict:
         '''
@@ -58,12 +64,22 @@ class Ping:
         }
         split_ping_response = response.splitlines()
 
-        ping_was_able_to_resolve_host = \
-            self.determine_if_able_to_resolve_host(split_ping_response)
-        if not ping_was_able_to_resolve_host:
-            return parsed_ping_dict
+        if url == LOCAL_ROUTER:
+            # For local router, check if able to connect before moving on
+            able_to_connect_to_router = \
+                self.check_route_to_local_router_and_update_parsed_ping_dict(
+                    split_ping_response, parsed_ping_dict)
+            if not able_to_connect_to_router:
+                return parsed_ping_dict
+        else:
+            ping_was_able_to_resolve_host = \
+                self.determine_if_able_to_resolve_host(
+                    url, split_ping_response)
+            if not ping_was_able_to_resolve_host:
+                return parsed_ping_dict
 
         parsed_ping_dict[RESPONSE_KEY_ABLE_TO_RESOLVE_HOST] = True
+
         # Parse appropriate metrics and update parsed_ping_dict
         ping_summary_response = split_ping_response[-2]
         self.parse_ping_summary_and_update_parsed_ping_dict(
@@ -117,6 +133,7 @@ class Ping:
 
     def determine_if_able_to_resolve_host(
             self: Ping,
+            url: str,
             split_ping_response: str) -> bool:
         '''
         Determines if ping was able to resolve host.
@@ -125,5 +142,17 @@ class Ping:
         '''
         if len(split_ping_response) == 1:
             return False
-        else:
-            return True
+        return True
+
+    def check_route_to_local_router_and_update_parsed_ping_dict(
+            self: Ping,
+            split_ping_response: str,
+            parsed_ping_dict: dict) -> bool:
+        '''
+        If not able to connect to local router, the ping fails and exits with
+        a message that contains the following in the string:
+        returned non-zero exit status
+        '''
+        if LOCAL_ROUTER_ERROR_MESSAGE in split_ping_response[0]:
+            return False
+        return True

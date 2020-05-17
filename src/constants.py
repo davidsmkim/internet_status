@@ -20,7 +20,10 @@ LOCAL_ROUTER = '192.168.86.1'
 MAX_ACCEPTABLE_PACKET_LOSS = 3
 MAX_ACCEPTABLE_AVERAGE_ROUND_TRIP_TIME = 40
 
-# Errors
+# Local Router error
+LOCAL_ROUTER_ERROR_MESSAGE = 'returned non-zero exit status'
+
+# Errors consts
 DESTINATION_HOST_UNREACHABLE = 'destination host unreachable'
 PACKET_LOSS = 'packet loss'
 UNABLE_TO_RESOLVE_HOST = 'unable to resolve host'
