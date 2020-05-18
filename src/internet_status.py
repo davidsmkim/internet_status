@@ -82,7 +82,7 @@ class InternetStatus():
         for _ in range(2):
             host = get_random_host(self.external_hosts)
             parsed_host_response = \
-                self.ping.ping_host_and_return_parsed_response(host, 30)
+                self.ping.ping_host_and_return_parsed_response(host, 50)
             ping_test_results[host] = parsed_host_response
             ping_to_external_host_was_successful = \
                 self.check_if_ping_was_successful(
@@ -94,7 +94,7 @@ class InternetStatus():
         if not ping_to_external_host_was_successful:
             parsed_router_response = \
                 self.ping.ping_host_and_return_parsed_response(
-                    LOCAL_ROUTER, 30)
+                    LOCAL_ROUTER, 50)
             ping_test_results[LOCAL_ROUTER] = parsed_router_response
             ping_to_local_router_was_successful = \
                 self.check_if_ping_was_successful(
