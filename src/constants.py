@@ -39,3 +39,7 @@ RESPONSE_KEY_MAX_ROUND_TRIP_TIME = 'max_round_trip_time'
 RESPONSE_KEY_AVERAGE_ROUND_TRIP_TIME = 'average_round_trip_time'
 RESPONSE_KEY_ABLE_TO_RESOLVE_HOST = 'able_to_resolve_host'
 RESPONSE_KEY_ERROR = 'error'
+
+# Logger Statuses
+LOGGER_STATUS_CHECK_RUNNING_MESSAGE = '--- Internet Status Check Running ---'
+LOGGER_RUNNING_PING_TEST_MESSAGE = '--- Running Ping Test ---'

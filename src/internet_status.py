@@ -7,6 +7,8 @@ from src.constants import (
     GOOGLE_HOSTNAME,
     LOCAL_ROUTER,
     LOCAL_ROUTER_ERROR,
+    LOGGER_RUNNING_PING_TEST_MESSAGE,
+    LOGGER_STATUS_CHECK_RUNNING_MESSAGE,
     MODEM_ERROR,
     PACKET_LOSS_ERROR,
     RESOLVE_HOST_ERROR,
@@ -42,7 +44,7 @@ class InternetStatus():
             if status_update_iteration == 20:
                 current_time = get_datetime()
                 logger.log(current_time,
-                           '--- Internet Status Check Running ---')
+                           LOGGER_STATUS_CHECK_RUNNING_MESSAGE)
                 status_update_iteration = 0
 
     def run_ping_tests(self: InternetStatus) -> None:
@@ -75,8 +77,7 @@ class InternetStatus():
         self.external_hosts = tuple(self.external_hosts_list)
         start_time = get_datetime()
         error = None
-        print('--- Running Ping Test ---')
-        print(start_time)
+        logger.log_verbose(LOGGER_RUNNING_PING_TEST_MESSAGE)
 
         # Check if able to successfully ping external hosts
         for _ in range(2):
@@ -108,7 +109,7 @@ class InternetStatus():
                     ping_test_results)
 
             logger.log(start_time, error)
-        print(ping_test_results)
+        logger.log_verbose(ping_test_results)
 
     def get_most_severe_error_and_compile_message(
             self: InternetStatus,
