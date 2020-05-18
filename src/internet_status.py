@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from src.constants import (
+    AMAZON_HOSTNAME,
     APPLE_HOSTNAME,
     COM_SUFFIX,
     GOOGLE_HOSTNAME,
@@ -16,7 +17,8 @@ from src.constants import (
 )
 from src.internet_status_util import (
     create_url,
-    get_datetime
+    get_datetime,
+    get_random_host
 )
 from src.ping import Ping
 from src.logger import logger
@@ -29,7 +31,8 @@ class InternetStatus():
 
         google_url = create_url(GOOGLE_HOSTNAME, COM_SUFFIX)
         apple_url = create_url(APPLE_HOSTNAME, COM_SUFFIX)
-        self.external_host_list = [google_url, apple_url]
+        amazon_url = create_url(AMAZON_HOSTNAME, COM_SUFFIX)
+        self.external_hosts_list = [google_url, apple_url, amazon_url]
 
     def run_internet_status_check(self: InternetStatus) -> None:
         while True:
@@ -38,8 +41,9 @@ class InternetStatus():
     def run_ping_tests(self: InternetStatus) -> None:
         '''
         Runs a ping test against the provided external_host_list and local
-        router.  The ping test starts with www.google.com and only continues to
-        the next host if there is an issue with pinging the current host.
+        router.  The ping test chooses two random external hosts and only
+        continues to the next host if there is an issue with pinging the
+        first host.
 
         If we are unable to successfully ping external hosts, we check the
         connection to the local router to see if an issue exists there.
@@ -61,15 +65,17 @@ class InternetStatus():
         '''
 
         ping_test_results = {}
+        self.external_hosts = tuple(self.external_hosts_list)
         start_time = get_datetime()
         error = None
         print('Running Ping Test')
         print(start_time)
 
         # Check if able to successfully ping external hosts
-        for host in self.external_host_list:
+        for _ in range(2):
+            host = get_random_host(self.external_hosts)
             parsed_host_response = \
-                self.ping.ping_host_and_return_parsed_response(host, 10)
+                self.ping.ping_host_and_return_parsed_response(host, 30)
             ping_test_results[host] = parsed_host_response
             ping_to_external_host_was_successful = \
                 self.check_if_ping_was_successful(
@@ -81,7 +87,7 @@ class InternetStatus():
         if not ping_to_external_host_was_successful:
             parsed_router_response = \
                 self.ping.ping_host_and_return_parsed_response(
-                    LOCAL_ROUTER, 10)
+                    LOCAL_ROUTER, 30)
             ping_test_results[LOCAL_ROUTER] = parsed_router_response
             ping_to_local_router_was_successful = \
                 self.check_if_ping_was_successful(
