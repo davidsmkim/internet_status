@@ -35,8 +35,15 @@ class InternetStatus():
         self.external_hosts_list = [google_url, apple_url, amazon_url]
 
     def run_internet_status_check(self: InternetStatus) -> None:
+        status_update_iteration = 0
         while True:
             self.run_ping_tests()
+            status_update_iteration += 1
+            if status_update_iteration == 20:
+                current_time = get_datetime()
+                logger.log(current_time,
+                           '--- Internet Status Check Running ---')
+                status_update_iteration = 0
 
     def run_ping_tests(self: InternetStatus) -> None:
         '''
@@ -68,7 +75,7 @@ class InternetStatus():
         self.external_hosts = tuple(self.external_hosts_list)
         start_time = get_datetime()
         error = None
-        print('Running Ping Test')
+        print('--- Running Ping Test ---')
         print(start_time)
 
         # Check if able to successfully ping external hosts
