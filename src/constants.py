@@ -23,12 +23,6 @@ MAX_ACCEPTABLE_AVERAGE_ROUND_TRIP_TIME = 40
 # Command exit error
 COMMAND_EXIT_ERROR_MESSAGE = 'returned non-zero exit status'
 
-# Errors consts
-DESTINATION_HOST_UNREACHABLE = 'destination host unreachable'
-PACKET_LOSS = 'packet loss'
-UNABLE_TO_RESOLVE_HOST = 'unable to resolve host'
-UNACCEPTABLE_ROUND_TRIP_TIME = 'unacceptable round trip time'
-
 # Error log messages
 LOCAL_ROUTER_ERROR = 'Cannot connect to local router'
 RESOLVE_HOST_ERROR = 'Cannot connect to internet: Unable to resolve host'

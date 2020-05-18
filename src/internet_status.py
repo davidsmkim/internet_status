@@ -1,24 +1,19 @@
 from __future__ import annotations
-from typing import List
 
 from src.constants import (
     APPLE_HOSTNAME,
     COM_SUFFIX,
+    COMMAND_EXIT_ERROR_MESSAGE,
     GOOGLE_HOSTNAME,
     LOCAL_ROUTER,
     LOCAL_ROUTER_ERROR,
-    MAX_ACCEPTABLE_PACKET_LOSS,
-    MAX_ACCEPTABLE_AVERAGE_ROUND_TRIP_TIME,
-    PACKET_LOSS,
     PACKET_LOSS_ERROR,
     RESOLVE_HOST_ERROR,
+    RESPONSE_KEY_ERROR,
     RESPONSE_KEY_PACKET_LOSS_PERCENT,
     RESPONSE_KEY_AVERAGE_ROUND_TRIP_TIME,
     RESPONSE_KEY_ABLE_TO_RESOLVE_HOST,
-    RESPONSE_KEY_ERROR,
     ROUND_TRIP_TIME_ERROR,
-    UNABLE_TO_RESOLVE_HOST,
-    UNACCEPTABLE_ROUND_TRIP_TIME
 )
 from src.internet_status_util import (
     create_url,
@@ -30,20 +25,18 @@ from src.logger import logger
 
 class InternetStatus():
 
-    def run_internet_status_check(self: InternetStatus) -> None:
-        ping = Ping()
+    def __init__(self: InternetStatus) -> None:
+        self.ping = Ping()
 
         google_url = create_url(GOOGLE_HOSTNAME, COM_SUFFIX)
         apple_url = create_url(APPLE_HOSTNAME, COM_SUFFIX)
-        external_host_list = [google_url, apple_url]
+        self.external_host_list = [google_url, apple_url]
 
+    def run_internet_status_check(self: InternetStatus) -> None:
         while True:
-            self.run_ping_tests(ping, external_host_list)
+            self.run_ping_tests()
 
-    def run_ping_tests(
-            self: InternetStatus,
-            ping: Ping,
-            external_host_list: [List[str]]) -> None:
+    def run_ping_tests(self: InternetStatus) -> None:
         '''
         Runs a ping test against the provided external_host_list and local
         router.  The ping test starts with www.google.com and only continues to
@@ -56,7 +49,7 @@ class InternetStatus():
         are present, the issue is logged and timestamped.  If multiple errors
         are present, the errors will be logged in the following precedence
         order:
-        Cannot connect to local router: Unable to resolve host
+        Cannot connect to local router
         Cannot connect to internet: Unable to resolve host
         30% packet loss
         50 ms average round trip time
@@ -73,31 +66,32 @@ class InternetStatus():
         error = None
 
         # Check if able to successfully ping external hosts
-        for host in external_host_list:
+        for host in self.external_host_list:
             parsed_host_response = \
-                ping.ping_host_and_return_parsed_response(host, 10)
+                self.ping.ping_host_and_return_parsed_response(host, 10)
             ping_test_results[host] = parsed_host_response
             ping_to_external_host_was_successful = \
-                self.check_if_ping_was_successful(parsed_host_response)
+                self.ping.check_if_ping_was_successful(
+                    parsed_host_response)
             if ping_to_external_host_was_successful:
                 break
 
         # Check local router
         if not ping_to_external_host_was_successful:
             parsed_router_response = \
-                ping.ping_host_and_return_parsed_response(LOCAL_ROUTER, 10)
+                self.ping.ping_host_and_return_parsed_response(
+                    LOCAL_ROUTER, 10)
             ping_test_results[LOCAL_ROUTER] = parsed_router_response
             ping_to_local_router_was_successful = \
-                self.check_if_ping_was_successful(parsed_router_response)
+                self.ping.check_if_ping_was_successful(
+                    parsed_router_response)
 
             if not ping_to_local_router_was_successful:
                 error = LOCAL_ROUTER_ERROR
             else:
                 # Check final ping statuses
-                error = None
-                if not ping_to_external_host_was_successful:
-                    error = self.get_most_severe_error_and_compile_message(
-                        ping_test_results)
+                error = self.get_most_severe_error_and_compile_message(
+                    ping_test_results)
 
             if error:
                 logger.log(start_time, error)
@@ -108,9 +102,9 @@ class InternetStatus():
 
         # Determine most severe error
         error_precedence = [
-            LOCAL_ROUTER_ERROR,
-            RESOLVE_HOST_ERROR,
+            COMMAND_EXIT_ERROR_MESSAGE,
             PACKET_LOSS_ERROR,
+            RESOLVE_HOST_ERROR,
             ROUND_TRIP_TIME_ERROR
         ]
 
@@ -137,49 +131,6 @@ class InternetStatus():
             most_severe_error = str(additional_error_data) + most_severe_error
 
         return most_severe_error
-
-    def check_if_ping_was_successful(
-            self: InternetStatus,
-            parsed_host_response: dict) -> bool:
-
-        if not self.check_if_ping_resolve_host(parsed_host_response):
-            parsed_host_response[RESPONSE_KEY_ERROR] = UNABLE_TO_RESOLVE_HOST
-            return False
-
-        elif not self.check_if_ping_packet_loss_acceptable(
-                parsed_host_response):
-            parsed_host_response[RESPONSE_KEY_ERROR] = PACKET_LOSS
-            return False
-
-        elif not self.check_if_ping_round_trip_time_acceptable(
-                parsed_host_response):
-            parsed_host_response[RESPONSE_KEY_ERROR] = \
-                UNACCEPTABLE_ROUND_TRIP_TIME
-            return False
-
-        parsed_host_response[RESPONSE_KEY_ERROR] = ''
-        return True
-
-    def check_if_ping_resolve_host(
-            self: InternetStatus,
-            parsed_host_response: dict) -> bool:
-        return parsed_host_response[RESPONSE_KEY_ABLE_TO_RESOLVE_HOST]
-
-    def check_if_ping_packet_loss_acceptable(
-            self: InternetStatus,
-            parsed_host_response: dict) -> bool:
-        if (parsed_host_response[RESPONSE_KEY_PACKET_LOSS_PERCENT] >
-                MAX_ACCEPTABLE_PACKET_LOSS):
-            return False
-        return True
-
-    def check_if_ping_round_trip_time_acceptable(
-            self: InternetStatus,
-            parsed_host_response: dict) -> bool:
-        if (parsed_host_response[RESPONSE_KEY_AVERAGE_ROUND_TRIP_TIME] >
-                MAX_ACCEPTABLE_AVERAGE_ROUND_TRIP_TIME):
-            return False
-        return True
 
 
 if __name__ == "__main__":
