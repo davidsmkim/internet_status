@@ -14,7 +14,7 @@ class Logger:
         self.write_to_file(self.log_file, 'Starting Log at: ' + current_time)
 
         self.verbose_log_file = '~/internet_status/internet_status_verbose.log'
-        self.verbose_log_file = os.path.expanduser(self.log_file)
+        self.verbose_log_file = os.path.expanduser(self.verbose_log_file)
         os.makedirs(os.path.dirname(self.verbose_log_file), exist_ok=True)
         self.write_to_file(
             self.verbose_log_file,
