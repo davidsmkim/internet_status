@@ -71,7 +71,7 @@ class InternetStatus():
                 self.ping.ping_host_and_return_parsed_response(host, 10)
             ping_test_results[host] = parsed_host_response
             ping_to_external_host_was_successful = \
-                self.ping.check_if_ping_was_successful(
+                self.check_if_ping_was_successful(
                     parsed_host_response)
             if ping_to_external_host_was_successful:
                 break
@@ -83,7 +83,7 @@ class InternetStatus():
                     LOCAL_ROUTER, 10)
             ping_test_results[LOCAL_ROUTER] = parsed_router_response
             ping_to_local_router_was_successful = \
-                self.ping.check_if_ping_was_successful(
+                self.check_if_ping_was_successful(
                     parsed_router_response)
 
             if not ping_to_local_router_was_successful:
@@ -131,6 +131,11 @@ class InternetStatus():
             most_severe_error = str(additional_error_data) + most_severe_error
 
         return most_severe_error
+
+    def check_if_ping_was_successful(
+            self: InternetStatus,
+            ping_test_results: dict) -> bool:
+        return not bool(ping_test_results[RESPONSE_KEY_ERROR])
 
 
 if __name__ == "__main__":

@@ -43,7 +43,6 @@ class InternetStatusTest(unittest.TestCase):
             mock_response: patch,
             mock_logger: Logger) -> None:
         mock_response.side_effect = [
-            LOCAL_ROUTER_SUCCESSFUL_RESPONSE,
             GOOGLE_SUCCESSFUL_RESPONSE
         ]
 
@@ -104,7 +103,6 @@ class InternetStatusTest(unittest.TestCase):
             self: InternetStatusTest,
             mock_response: patch,
             mock_logger: Logger) -> None:
-        print('----------')
         mock_response.side_effect = [
             GOOGLE_PACKET_LOSS_RESPONSE,
             APPLE_PACKET_LOSS_RESPONSE,
@@ -114,6 +112,7 @@ class InternetStatusTest(unittest.TestCase):
         self.internet_status.run_ping_tests()
         self.assertEqual(mock_logger.call_count, 1)
         args, _ = mock_logger.call_args_list[0]
+        args = args[1]
         self.assertIn(PACKET_LOSS_ERROR, args)
 
     @patch('src.logger.Logger.log')
@@ -131,6 +130,7 @@ class InternetStatusTest(unittest.TestCase):
         self.internet_status.run_ping_tests()
         self.assertEqual(mock_logger.call_count, 1)
         args, _ = mock_logger.call_args_list[0]
+        args = args[1]
         self.assertIn(ROUND_TRIP_TIME_ERROR, args)
 
     @patch('src.logger.Logger.log')
@@ -150,6 +150,7 @@ class InternetStatusTest(unittest.TestCase):
         self.internet_status.run_ping_tests()
         self.assertEqual(mock_logger.call_count, 1)
         args, _ = mock_logger.call_args_list[0]
+        args = args[1]
         self.assertIn(RESOLVE_HOST_ERROR, args)
 
         # Check second host is most severe
@@ -161,7 +162,8 @@ class InternetStatusTest(unittest.TestCase):
 
         self.internet_status.run_ping_tests()
         self.assertEqual(mock_logger.call_count, 2)
-        args, _ = mock_logger.call_args_list[2]
+        args, _ = mock_logger.call_args_list[1]
+        args = args[1]
         self.assertIn(PACKET_LOSS_ERROR, args)
 
         # Check local router is most severe
@@ -173,60 +175,9 @@ class InternetStatusTest(unittest.TestCase):
 
         self.internet_status.run_ping_tests()
         self.assertEqual(mock_logger.call_count, 3)
-        args, _ = mock_logger.call_args_list[3]
+        args, _ = mock_logger.call_args_list[2]
+        args = args[1]
         self.assertIn(LOCAL_ROUTER_ERROR, args)
-
-    def test_check_if_ping_was_successful_with_success(
-            self: InternetStatusTest) -> None:
-        pass
-
-    def test_check_if_ping_was_successful_with_unable_to_resolve_host_error(
-            self: InternetStatusTest) -> None:
-        pass
-
-    def test_check_if_ping_was_successful_with_packet_loss_error(
-            self: InternetStatusTest) -> None:
-        pass
-
-    def test_check_if_ping_was_successful_with_round_trip_time_error(
-            self: InternetStatusTest) -> None:
-        pass
-
-    def test_get_most_severe_error_with_local_router_error(
-            self: InternetStatusTest) -> None:
-        pass
-
-    def test_get_most_severe_error_with_resolve_host_error(
-            self: InternetStatusTest) -> None:
-        pass
-
-    def test_get_most_severe_error_with_packet_loss_error(
-            self: InternetStatusTest) -> None:
-        pass
-
-    def test_get_most_severe_error_with_round_trip_time_error(
-            self: InternetStatusTest) -> None:
-        pass
-
-    def test_get_most_severe_error_with_multiple_error_types(
-            self: InternetStatusTest) -> None:
-        pass
-
-    def test_check_if_ping_was_successful_with_success(
-            self: InternetStatusTest) -> None:
-        pass
-
-    def test_check_if_ping_was_successful_with_unable_to_resolve_host_error(
-            self: InternetStatusTest) -> None:
-        pass
-
-    def test_check_if_ping_was_successful_with_packet_loss_error(
-            self: InternetStatusTest) -> None:
-        pass
-
-    def test_check_if_ping_was_successful_with_round_trip_time_error(
-            self: InternetStatusTest) -> None:
-        pass
 
 
 if __name__ == '__main__':
