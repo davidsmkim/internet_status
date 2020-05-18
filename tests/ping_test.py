@@ -6,12 +6,10 @@ import unittest
 from src.constants import (
     LOCAL_ROUTER_ERROR,
     RESOLVE_HOST_ERROR,
-    PACKET_LOSS_ERROR,
-    ROUND_TRIP_TIME_ERROR
+    PACKET_LOSS_ERROR
 )
 from src.ping import Ping
 from tests.fake_test_data.ping_test_data import (
-    DESTINATION_HOST_UNREACHABLE_RESPONSE,
     GOOGLE_HOST,
     LOCAL_ROUTER_HOST,
     LOCAL_ROUTER_ISSUE_RESPONSE,

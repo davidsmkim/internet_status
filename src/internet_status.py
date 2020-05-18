@@ -12,7 +12,6 @@ from src.constants import (
     RESPONSE_KEY_ERROR,
     RESPONSE_KEY_PACKET_LOSS_PERCENT,
     RESPONSE_KEY_AVERAGE_ROUND_TRIP_TIME,
-    RESPONSE_KEY_ABLE_TO_RESOLVE_HOST,
     ROUND_TRIP_TIME_ERROR,
 )
 from src.internet_status_util import (
