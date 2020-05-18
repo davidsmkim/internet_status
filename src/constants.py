@@ -25,6 +25,7 @@ COMMAND_EXIT_ERROR_MESSAGE = 'returned non-zero exit status'
 
 # Error log messages
 LOCAL_ROUTER_ERROR = 'Cannot connect to local router'
+MODEM_ERROR = 'Cannot connect to internet: Modem down'
 RESOLVE_HOST_ERROR = 'Cannot connect to internet: Unable to resolve host'
 PACKET_LOSS_ERROR = '% packet loss'
 ROUND_TRIP_TIME_ERROR = ' ms average round trip time'

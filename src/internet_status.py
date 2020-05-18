@@ -3,10 +3,10 @@ from __future__ import annotations
 from src.constants import (
     APPLE_HOSTNAME,
     COM_SUFFIX,
-    COMMAND_EXIT_ERROR_MESSAGE,
     GOOGLE_HOSTNAME,
     LOCAL_ROUTER,
     LOCAL_ROUTER_ERROR,
+    MODEM_ERROR,
     PACKET_LOSS_ERROR,
     RESOLVE_HOST_ERROR,
     RESPONSE_KEY_ERROR,
@@ -63,6 +63,8 @@ class InternetStatus():
         ping_test_results = {}
         start_time = get_datetime()
         error = None
+        print('Running Ping Test')
+        print(start_time)
 
         # Check if able to successfully ping external hosts
         for host in self.external_host_list:
@@ -92,8 +94,8 @@ class InternetStatus():
                 error = self.get_most_severe_error_and_compile_message(
                     ping_test_results)
 
-            if error:
-                logger.log(start_time, error)
+            logger.log(start_time, error)
+        print(ping_test_results)
 
     def get_most_severe_error_and_compile_message(
             self: InternetStatus,
@@ -101,7 +103,8 @@ class InternetStatus():
 
         # Determine most severe error
         error_precedence = [
-            COMMAND_EXIT_ERROR_MESSAGE,
+            LOCAL_ROUTER_ERROR,
+            MODEM_ERROR,
             PACKET_LOSS_ERROR,
             RESOLVE_HOST_ERROR,
             ROUND_TRIP_TIME_ERROR

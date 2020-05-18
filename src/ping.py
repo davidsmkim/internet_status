@@ -6,7 +6,9 @@ from src.constants import (
     COMMAND_EXIT_ERROR_MESSAGE,
     MAX_ACCEPTABLE_AVERAGE_ROUND_TRIP_TIME,
     MAX_ACCEPTABLE_PACKET_LOSS,
+    LOCAL_ROUTER,
     LOCAL_ROUTER_ERROR,
+    MODEM_ERROR,
     PACKET_LOSS_ERROR,
     PING_COMMAND,
     PING_COUNT_OPTION,
@@ -78,7 +80,10 @@ class Ping:
         ping_executed_successfully = \
             self.check_if_ping_executed_successfully(split_ping_response)
         if not ping_executed_successfully:
-            parsed_ping_dict[RESPONSE_KEY_ERROR] = LOCAL_ROUTER_ERROR
+            if url == LOCAL_ROUTER:
+                parsed_ping_dict[RESPONSE_KEY_ERROR] = LOCAL_ROUTER_ERROR
+            else:
+                parsed_ping_dict[RESPONSE_KEY_ERROR] = MODEM_ERROR
             return parsed_ping_dict
 
         ping_was_able_to_resolve_host = \
