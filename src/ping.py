@@ -23,6 +23,7 @@ from src.constants import (
     RESPONSE_KEY_ABLE_TO_RESOLVE_HOST,
     ROUND_TRIP_TIME_ERROR
 )
+from src.logger import logger
 
 
 class Ping:
@@ -48,6 +49,7 @@ class Ping:
         'able_to_resolve_host' field, which is False.
         '''
         response = self.ping_host(url, num_pings)
+        logger.log_verbose(response)
         parsed_ping_dict = self.parse_ping_response(url, response)
         if not parsed_ping_dict[RESPONSE_KEY_ERROR]:
             self.check_if_ping_was_successful(parsed_ping_dict)
