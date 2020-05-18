@@ -21,12 +21,12 @@ class Logger:
             'Starting Log at: ' + current_time)
 
     def log(self: Logger, time_stamp: str, error_message: str) -> None:
-        write_content = time_stamp + ' - ' + error_message
+        write_content = time_stamp + ' - ' + str(error_message)
         self.write_to_file(self.log_file, write_content)
 
     def log_verbose(self: Logger, write_content: str) -> None:
         time_stamp = get_datetime()
-        write_content = time_stamp + ' - ' + write_content
+        write_content = time_stamp + ' - ' + str(write_content)
         self.write_to_file(self.verbose_log_file, write_content)
 
     def write_to_file(
