@@ -123,19 +123,13 @@ class Ping:
             int(packets_transmitted_data.split(' ')[0])
 
         # Get packet loss percentage
-        # If length of split_ping_summary is 3, then packet loss is at index 2
-        # Otherwise, there may be multiple errors that make the packet loss
+        # Sometimes there may be multiple errors that make the packet loss
         # index change
-        if len(split_ping_summary) == 3:
-            packet_loss_data = split_ping_summary[2]
-            parsed_ping_dict[RESPONSE_KEY_PACKET_LOSS_PERCENT] = \
-                float(packet_loss_data.split('%')[0])
-        else:
-            for metric in split_ping_summary:
-                if 'packet loss' in metric:
-                    packet_loss_data = metric
-                    parsed_ping_dict[RESPONSE_KEY_PACKET_LOSS_PERCENT] = \
-                        float(packet_loss_data.split('%')[0])
+        for metric in split_ping_summary:
+            if 'packet loss' in metric:
+                packet_loss_data = metric
+                parsed_ping_dict[RESPONSE_KEY_PACKET_LOSS_PERCENT] = \
+                    float(packet_loss_data.split('%')[0])
 
     def parse_ping_timing_and_update_parsed_ping_dict(
             self: Ping, parsed_ping_dict: dict, ping_timing: str) -> None:
