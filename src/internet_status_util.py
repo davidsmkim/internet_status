@@ -1,6 +1,6 @@
 import datetime
 import random
-from typing import Tuple
+from typing import List
 
 from src.constants import WWW_PREFIX
 
@@ -20,5 +20,7 @@ def get_datetime() -> str:
     return current_date + '@' + current_time
 
 
-def get_random_host(hosts: Tuple) -> str:
-    return random.choice(hosts)
+def get_random_host(hosts: List) -> str:
+    host = random.choice(hosts)
+    hosts.remove(host)
+    return host

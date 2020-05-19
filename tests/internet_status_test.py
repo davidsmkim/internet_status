@@ -4,6 +4,9 @@ from mock import patch
 import unittest
 
 from src.constants import (
+    AMAZON_HOSTNAME,
+    APPLE_HOSTNAME,
+    GOOGLE_HOSTNAME,
     LOCAL_ROUTER_ERROR,
     PACKET_LOSS_ERROR,
     RESOLVE_HOST_ERROR,
@@ -11,6 +14,7 @@ from src.constants import (
 )
 from src.internet_status import InternetStatus
 from src.logger import Logger
+from src.sec_constants import LOCAL_ROUTER
 from tests.fake_test_data.internet_status_test_data import (
     APPLE_PACKET_LOSS_RESPONSE,
     APPLE_ROUND_TRIP_TIME_ERROR_RESPONSE,

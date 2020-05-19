@@ -1,4 +1,5 @@
 from __future__ import annotations
+from copy import deepcopy
 
 from src.constants import (
     AMAZON_HOSTNAME,
@@ -74,14 +75,14 @@ class InternetStatus():
         '''
 
         ping_test_results = {}
-        self.external_hosts = tuple(self.external_hosts_list)
         start_time = get_datetime()
         error = None
         logger.log_verbose(LOGGER_RUNNING_PING_TEST_MESSAGE)
+        external_hosts = deepcopy(self.external_hosts_list)
 
         # Check if able to successfully ping external hosts
         for _ in range(2):
-            host = get_random_host(self.external_hosts)
+            host = get_random_host(external_hosts)
             parsed_host_response = \
                 self.ping.ping_host_and_return_parsed_response(host, 50)
             ping_test_results[host] = parsed_host_response
