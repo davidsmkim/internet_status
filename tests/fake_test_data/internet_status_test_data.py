@@ -49,7 +49,7 @@ APPLE_PACKET_LOSS_RESPONSE = '''
 PING www.apple.com (172.217.6.68): 56 data bytes
 
 --- www.apple.com ping statistics ---
-8 packets transmitted, 1 packets received, 87.5% packet loss
+8 packets transmitted, 1 packets received, 90.0% packet loss
 round-trip min/avg/max/stddev = 38.466/38.466/38.466/0.000 ms
 '''
 
@@ -58,7 +58,7 @@ PING www.apple.com (172.217.6.68): 56 data bytes
 
 --- www.google.com ping statistics ---
 8 packets transmitted, 8 packets received, 0% packet loss
-round-trip min/avg/max/stddev = 100/100/100/0.000 ms
+round-trip min/avg/max/stddev = 50/50/50/0.000 ms
 '''
 
 APPLE_UNABLE_TO_RESOLVE_HOST_RESPONSE = \

@@ -135,12 +135,25 @@ class InternetStatus():
                     error_precedence.index(current_error)):
                 most_severe_error = current_error
 
-                if most_severe_error == PACKET_LOSS_ERROR:
+            # Get more severe additional data
+            if most_severe_error == PACKET_LOSS_ERROR:
+                if not additional_error_data:
                     additional_error_data = parsed_host_response[
                             RESPONSE_KEY_PACKET_LOSS_PERCENT]
-                elif most_severe_error == ROUND_TRIP_TIME_ERROR:
+                else:
+                    additional_error_data = \
+                        max(additional_error_data,
+                            parsed_host_response[
+                                RESPONSE_KEY_PACKET_LOSS_PERCENT])
+            elif most_severe_error == ROUND_TRIP_TIME_ERROR:
+                if not additional_error_data:
                     additional_error_data = parsed_host_response[
                             RESPONSE_KEY_AVERAGE_ROUND_TRIP_TIME]
+                else:
+                    additional_error_data = \
+                        max(additional_error_data,
+                            parsed_host_response[
+                                RESPONSE_KEY_AVERAGE_ROUND_TRIP_TIME])
 
         # Add numeric data for packet loss and round trip time errors
         if most_severe_error == PACKET_LOSS_ERROR or \

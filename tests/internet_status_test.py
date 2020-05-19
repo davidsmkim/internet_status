@@ -114,6 +114,7 @@ class InternetStatusTest(unittest.TestCase):
         args, _ = mock_logger.call_args_list[0]
         args = args[1]
         self.assertIn(PACKET_LOSS_ERROR, args)
+        self.assertIn(str(90.0), args)
 
     @patch('src.logger.Logger.log')
     @patch('src.ping.Ping.ping_host')
@@ -132,6 +133,7 @@ class InternetStatusTest(unittest.TestCase):
         args, _ = mock_logger.call_args_list[0]
         args = args[1]
         self.assertIn(ROUND_TRIP_TIME_ERROR, args)
+        self.assertIn(str(100.0), args)
 
     @patch('src.logger.Logger.log')
     @patch('src.ping.Ping.ping_host')
