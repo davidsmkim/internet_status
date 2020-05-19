@@ -6,7 +6,6 @@ from src.constants import (
     COMMAND_EXIT_ERROR_MESSAGE,
     MAX_ACCEPTABLE_AVERAGE_ROUND_TRIP_TIME,
     MAX_ACCEPTABLE_PACKET_LOSS,
-    LOCAL_ROUTER,
     LOCAL_ROUTER_ERROR,
     MODEM_ERROR,
     PACKET_LOSS_ERROR,
@@ -24,6 +23,7 @@ from src.constants import (
     ROUND_TRIP_TIME_ERROR
 )
 from src.logger import logger
+from src.sec_constants import LOCAL_ROUTER
 
 
 class Ping:

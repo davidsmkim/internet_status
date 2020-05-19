@@ -5,7 +5,6 @@ from src.constants import (
     APPLE_HOSTNAME,
     COM_SUFFIX,
     GOOGLE_HOSTNAME,
-    LOCAL_ROUTER,
     LOCAL_ROUTER_ERROR,
     LOGGER_RUNNING_PING_TEST_MESSAGE,
     LOGGER_STATUS_CHECK_RUNNING_MESSAGE,
@@ -22,8 +21,9 @@ from src.internet_status_util import (
     get_datetime,
     get_random_host
 )
-from src.ping import Ping
 from src.logger import logger
+from src.ping import Ping
+from src.sec_constants import LOCAL_ROUTER
 
 
 class InternetStatus():
