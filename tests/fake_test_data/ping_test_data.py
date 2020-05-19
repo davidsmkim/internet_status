@@ -30,6 +30,14 @@ Vr HL TOS  Len   ID Flg  off TTL Pro  cks      Src      Dst
 round-trip min/avg/max/stddev = 12.675/19.868/26.924/5.168 ms
 '''
 
+RECEIVED_ERRORS_RESPONSE = '''
+PING www.google.com (216.58.194.196) 56(84) bytes of data.
+
+--- www.google.com ping statistics ---
+50 packets transmitted, 30 received, +9 errors, 40% packet loss, time 560ms
+rtt min/avg/max/mdev = 10.660/15.753/25.651/3.631 ms, pipe 3
+'''
+
 LOCAL_ROUTER_ISSUE_RESPONSE = \
     "Command '['ping', '-c', '10', '-q', '192.168.86.1']' returned " + \
     "non-zero exit status 2."

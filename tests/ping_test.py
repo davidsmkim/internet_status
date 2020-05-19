@@ -15,6 +15,7 @@ from tests.fake_test_data.ping_test_data import (
     LOCAL_ROUTER_ISSUE_RESPONSE,
     SUCCESSFUL_RESPONSE,
     PACKET_LOSS_RESPONSE,
+    RECEIVED_ERRORS_RESPONSE,
     UNABLE_TO_RESOLVE_HOST_RESPONSE
 )
 
@@ -26,9 +27,12 @@ class PingTest(unittest.TestCase):
     def tearDown(self: PingTest) -> None:
         pass
 
+    @patch('src.logger.Logger.log_verbose')
     @patch('src.ping.Ping.ping_host')
     def test_parse_ping_response_success(
-            self: PingTest, mock_ping_host: patch) -> None:
+            self: PingTest,
+            mock_ping_host: patch,
+            mock_logger: patch) -> None:
         mock_ping_host.return_value = SUCCESSFUL_RESPONSE
 
         parsed_ping_dict = \
@@ -44,9 +48,12 @@ class PingTest(unittest.TestCase):
         }
         self.assertEqual(parsed_ping_dict, expected_parsed_ping_dict)
 
+    @patch('src.logger.Logger.log_verbose')
     @patch('src.ping.Ping.ping_host')
     def test_parse_ping_response_with_packet_loss(
-            self: PingTest, mock_ping_host: patch) -> None:
+            self: PingTest,
+            mock_ping_host: patch,
+            mock_logger: patch) -> None:
         mock_ping_host.return_value = PACKET_LOSS_RESPONSE
 
         parsed_ping_dict = \
@@ -62,13 +69,16 @@ class PingTest(unittest.TestCase):
         }
         self.assertEqual(parsed_ping_dict, expected_parsed_ping_dict)
 
+    @patch('src.logger.Logger.log_verbose')
     @patch('src.ping.Ping.ping_host')
     def test_parse_ping_response_unable_to_resolve_host(
-            self: PingTest, mock_ping_host: patch) -> None:
+            self: PingTest,
+            mock_ping_host: patch,
+            mock_logger: patch) -> None:
         mock_ping_host.return_value = UNABLE_TO_RESOLVE_HOST_RESPONSE
 
         parsed_ping_dict = self.ping.ping_host_and_return_parsed_response(
-            GOOGLE_HOST, UNABLE_TO_RESOLVE_HOST_RESPONSE)
+            GOOGLE_HOST)
         expected_parsed_ping_dict = {
             'host': 'www.google.com',
             'able_to_resolve_host': False,
@@ -76,18 +86,41 @@ class PingTest(unittest.TestCase):
         }
         self.assertEqual(parsed_ping_dict, expected_parsed_ping_dict)
 
+    @patch('src.logger.Logger.log_verbose')
     @patch('src.ping.Ping.ping_host')
     def test_parse_ping_response_with_local_router_error(
-            self: PingTest, mock_ping_host: patch) -> None:
+            self: PingTest,
+            mock_ping_host: patch,
+            mock_logger: patch) -> None:
         mock_ping_host.return_value = LOCAL_ROUTER_ISSUE_RESPONSE
 
         parsed_ping_dict = self.ping.ping_host_and_return_parsed_response(
-                LOCAL_ROUTER_HOST,
-                LOCAL_ROUTER_ISSUE_RESPONSE)
+                LOCAL_ROUTER_HOST)
         expected_parsed_ping_dict = {
             'host': '192.168.86.1',
             'able_to_resolve_host': False,
             'error': LOCAL_ROUTER_ERROR
+        }
+        self.assertEqual(parsed_ping_dict, expected_parsed_ping_dict)
+
+    @patch('src.logger.Logger.log_verbose')
+    @patch('src.ping.Ping.ping_host')
+    def test_parse_ping_response_with_received_errors(
+            self: PingTest,
+            mock_ping_host: patch,
+            mock_logger: patch) -> None:
+        mock_ping_host.return_value = RECEIVED_ERRORS_RESPONSE
+
+        parsed_ping_dict = self.ping.ping_host_and_return_parsed_response(
+                GOOGLE_HOST)
+        expected_parsed_ping_dict = {
+            'host': 'www.google.com',
+            'num_packets_sent': 50,
+            'packet_loss_percent': 40.0,
+            'max_round_trip_time': 25.651,
+            'average_round_trip_time': 15.753,
+            'able_to_resolve_host': True,
+            'error': PACKET_LOSS_ERROR
         }
         self.assertEqual(parsed_ping_dict, expected_parsed_ping_dict)
 
