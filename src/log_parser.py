@@ -30,13 +30,17 @@ class LogParser:
         return log_file_path
 
     def get_log_file_string(self: LogParser, log_file_path: str) -> str:
+        log_file_string = None
+
         try:
-            log_file_string = open(log_file_path, 'r')
-            return log_file_string
-        except Exception as e:
-            print('Unable to open log file: ' + str(e))
+            with open(log_file_path, 'r') as log_file:
+                log_file_string = log_file.read()
+        except Exception:
+            print('Unable to open log file')
+        return log_file_string
 
     def parse_log(self: LogParser, log_file_string: str) -> dict:
+
         internet_status_summary = {}
 
         log_message_error_to_summary_key_map = {
@@ -79,4 +83,4 @@ class LogParser:
 
 if __name__ == '__main__':
     log_parser = LogParser()
-    log_parser.run_parser()
+    print(log_parser.run_parser())
