@@ -21,7 +21,7 @@ class LogParser:
         log_file_path = self.get_log_file_path()
         log_file_string = self.get_log_file_string(log_file_path)
         internet_status_summary = self.parse_log(log_file_string)
-        print(internet_status_summary)
+        return internet_status_summary
 
     def get_log_file_path(self: LogParser) -> IO:
         return '~/internet_status/internet_status.log'
@@ -44,9 +44,9 @@ class LogParser:
         }
 
         for line in log_file_string.splitlines():
-
-            # Check if starting log message
-            if LOGGER_STARTING_LOG in line or \
+            # Check if empty line or starting log message
+            if not line or \
+                    LOGGER_STARTING_LOG in line or \
                     LOGGER_STATUS_CHECK_RUNNING_MESSAGE in line:
                 continue
 

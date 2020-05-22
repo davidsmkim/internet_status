@@ -87,9 +87,21 @@ Starting Log at: 05/21/20@02:56:46
 05/21/20@14:09:24 - --- Internet Status Check Running ---
 05/21/20@14:25:47 - --- Internet Status Check Running ---
 05/21/20@14:43:00 - --- Internet Status Check Running ---
-05/21/20@14:59:23 - --- Internet Status Check Running ---
+05/21/20@14:59:23 - Cannot connect to local router
 05/21/20@15:00:12 - 14.0% packet loss
 05/21/20@15:06:00 - 48.0% packet loss
 05/21/20@15:12:46 - 60.0% packet loss
 05/21/20@15:22:00 - --- Internet Status Check Running ---
+05/22/20@15:22:00 - 14.0% packet loss
+05/22/20@15:23:00 - 14.0% packet loss
+05/22/20@15:24:00 - 14.0% packet loss
+05/22/20@10:06:24 - Cannot connect to internet: Modem down
+05/22/20@10:06:24 - Cannot connect to internet: Modem down
+05/22/20@14:59:23 - Cannot connect to local router
+05/22/20@11:08:35 - 138.778 ms average round trip time
+05/22/20@11:08:35 - 138.778 ms average round trip time
+05/22/20@11:08:35 - 138.778 ms average round trip time
+05/22/20@11:08:35 - 138.778 ms average round trip time
+05/22/20@15:22:00 - --- Internet Status Check Running ---
+05/22/20@15:22:00 - --- Internet Status Check Running ---
 '''
