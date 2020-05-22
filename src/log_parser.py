@@ -16,6 +16,13 @@ from src.constants import (
 
 
 class LogParser:
+
+    def run_parser(self: LogParser) -> None:
+        log_file_path = self.get_log_file_path()
+        log_file_string = self.get_log_file_string(log_file_path)
+        internet_status_summary = self.parse_log(log_file_string)
+        print(internet_status_summary)
+
     def get_log_file_path(self: LogParser) -> IO:
         return '~/internet_status/internet_status.log'
 
@@ -69,7 +76,4 @@ class LogParser:
 
 if __name__ == '__main__':
     log_parser = LogParser()
-    log_file_path = log_parser.get_log_file_path()
-    log_file_string = log_parser.get_log_file_string(log_file_path)
-    internet_status_summary = log_parser.parse_log(log_file_string)
-    print(internet_status_summary)
+    log_parser.run_parser()
