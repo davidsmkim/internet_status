@@ -168,6 +168,6 @@ class InternetStatus():
         return not bool(ping_test_results[RESPONSE_KEY_ERROR])
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     internet_status = InternetStatus()
     internet_status.run_internet_status_check()

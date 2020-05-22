@@ -42,3 +42,10 @@ RESPONSE_KEY_ERROR = 'error'
 # Logger Statuses
 LOGGER_STATUS_CHECK_RUNNING_MESSAGE = '--- Internet Status Check Running ---'
 LOGGER_RUNNING_PING_TEST_MESSAGE = '--- Running Ping Test ---'
+LOGGER_STARTING_LOG = 'Starting Log at: '
+
+# Log parser
+PARSER_PACKET_LOSS = 'packet_loss'
+PARSER_ROUND_TRIP_TIME = 'round_trip_time'
+PARSER_MODEM_DOWN = 'modem_down'
+PARSER_ROUTER_DOWN = 'router_down'
