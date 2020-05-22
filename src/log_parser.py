@@ -1,4 +1,5 @@
 from __future__ import annotations
+import os
 from typing import IO
 
 from src.constants import (
@@ -24,7 +25,9 @@ class LogParser:
         return internet_status_summary
 
     def get_log_file_path(self: LogParser) -> IO:
-        return '~/internet_status/internet_status.log'
+        log_file_path = '~/internet_status/internet_status.log'
+        log_file_path = os.path.expanduser(log_file_path)
+        return log_file_path
 
     def get_log_file_string(self: LogParser, log_file_path: str) -> str:
         try:
