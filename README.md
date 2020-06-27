@@ -60,36 +60,32 @@ Starting Log at: 06/03/20@00:51:20
 
 internet_status.log with errors:
 ```
-06/03/20@11:02:21 - 213.008 ms average round trip time
-06/03/20@11:15:27 - --- Internet Status Check Running ---
-06/03/20@11:31:51 - --- Internet Status Check Running ---
-06/03/20@11:48:13 - --- Internet Status Check Running ---
-06/03/20@12:04:36 - --- Internet Status Check Running ---
-06/03/20@12:20:59 - --- Internet Status Check Running ---
-06/03/20@12:37:22 - --- Internet Status Check Running ---
-06/03/20@12:46:23 - 51.41 ms average round trip time
-06/03/20@12:48:50 - 49.254 ms average round trip time
-...
-06/08/20@23:11:07 - 16.0% packet loss
-06/08/20@23:25:53 - --- Internet Status Check Running ---
-06/08/20@23:42:20 - --- Internet Status Check Running ---
-06/08/20@23:58:46 - --- Internet Status Check Running ---
-...
-06/11/20@14:36:35 - --- Internet Status Check Running ---
-06/11/20@14:52:58 - --- Internet Status Check Running ---
-06/11/20@14:59:31 - 786.329 ms average round trip time
-06/11/20@15:02:00 - Cannot connect to internet: Modem down
-06/11/20@15:03:10 - Cannot connect to internet: Modem down
-06/11/20@15:04:19 - 2607.847 ms average round trip time
-06/11/20@15:07:01 - Cannot connect to internet: Modem down
-06/11/20@15:12:16 - 77.303 ms average round trip time
-06/11/20@15:15:33 - --- Internet Status Check Running ---
-...
-06/21/20@23:40:33 - Cannot connect to local router
-06/21/20@23:40:33 - Cannot connect to local router
-06/21/20@23:40:33 - --- Internet Status Check Running ---
-06/21/20@23:40:33 - Cannot connect to local router
-06/21/20@23:40:33 - Cannot connect to local router
+05/26/20@16:56:22 - 28.0% packet loss
+05/26/20@16:58:54 - 48.0% packet loss
+05/26/20@17:01:29 - 76.0% packet loss
+05/26/20@17:04:05 - Cannot connect to internet: Modem down
+05/26/20@17:05:16 - Cannot connect to internet: Modem down
+05/26/20@17:06:45 - 80.0% packet loss
+05/26/20@17:09:32 - Cannot connect to internet: Modem down
+05/26/20@17:15:58 - 72.0% packet loss
+05/26/20@17:18:34 - Cannot connect to internet: Modem down
+05/26/20@17:19:45 - 60.0% packet loss
+05/26/20@17:22:24 - 30.0% packet loss
+05/26/20@17:25:01 - 94.0% packet loss
+05/26/20@17:27:42 - 6.0% packet loss
+05/26/20@17:30:14 - Cannot connect to internet: Modem down
+05/26/20@17:32:05 - 6.0% packet loss
+05/26/20@17:34:37 - --- Internet Status Check Running ---
+05/26/20@17:34:37 - Cannot connect to internet: Modem down
+05/26/20@17:36:35 - Cannot connect to internet: Modem down
+05/26/20@17:44:19 - 42.0% packet loss
+05/26/20@17:50:16 - 80.0% packet loss
+05/26/20@18:00:15 - --- Internet Status Check Running ---
+05/26/20@18:15:01 - Cannot connect to internet: Modem down
+05/26/20@18:16:53 - Cannot connect to internet: Modem down
+05/26/20@18:18:20 - --- Internet Status Check Running ---
+05/26/20@18:19:09 - 10.0% packet loss
+05/26/20@18:24:57 - 46.0% packet loss
 ```
 
 internet_status_verbose.log
