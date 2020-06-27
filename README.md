@@ -1,8 +1,9 @@
 # Internet Status
 
-### Background
+### Summary
 This project was created to help log and record my home's internet status.  Usage examples are provided below.
 
+### Background
 After moving into a new home, I quickly noticed my internet connection was abysmal.  There were frequent times when my modem would reset, I would experience high packet loss, or experience ridiculously high latency.  After contacting my internet provider (over 30 phone calls and 5 technician visits), the issue was still not resolved.  The vast majority of the time, the support agents did not believe that I was facing any issue as whenever a technician came or the agents checked their signal on their end, everything looked good.
 
 After much frustration, I decided to create this program to log my internet status in order to have definitive proof that my internet status was terrible.  Interestingly enough, this revealed that the problem was significantly worse than I had originally thought with my internet going down for hours at a time during the night.
