@@ -36,7 +36,7 @@ This will create the following:
  ```
  python3 -m src.log_parser
  ```
- This summary parses the aforementioned internet_status.log file and displays any dates that had issues along with their counts.  If no issues arose on a given date, the date is absente from the resulting summary.
+ This summary parses the aforementioned internet_status.log file and displays any dates that had issues along with their counts.  If no issues arose on a given date, the date is absent from the resulting summary.
 
 As the summary parses the aforementioned log file, this file obviously needs to exist.
 
