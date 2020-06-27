@@ -1,7 +1,7 @@
 # Internet Status
 
 ### Background
-This project was created to help log and record my home's internet status.
+This project was created to help log and record my home's internet status.  Usage examples are provided below.
 
 After moving into a new home, I quickly noticed my internet connection was abysmal.  There were frequent times when my modem would reset, I would experience high packet loss, or experience ridiculously high latency.  After contacting my internet provider (over 30 phone calls and 5 technician visits), the issue was still not resolved.  The vast majority of the time, the support agents did not believe that I was facing any issue as whenever a technician came or the agents checked their signal on their end, everything looked good.
 
@@ -38,13 +38,6 @@ This will create the following:
  This summary parses the aforementioned internet_status.log file and displays any dates that had issues along with their counts.  If no issues arose on a given date, the date is absente from the resulting summary.
 
 As the summary parses the aforementioned log file, this file obviously needs to exist.
-
-### Other Notes
-This program works by pinging two random hosts out of a list of hosts (currently comprised of www.apple.com, www.amazon.com, www.google.com). If there is no issue with the first host, we consider that a good result.  If there is any issue with the ping result, we ping the second host to double check that there isn't an issue with the first host.  If there is an issue with both hosts, we check the local router. Depending on the errors received from both hosts and the local router (if any), we log the most severe error. We deem the errors from most severe to least severe to be:
-1. An issue with the local router
-2. An issue with the modem or being unable to connect to the internet as a whole
-3. Packet loss
-4. High latency
 
 ### Usage Examples
 This is what the program looks like while running.
@@ -120,3 +113,12 @@ summary
 ```
 {'06/03/20': {'packet_loss': 0, 'round_trip_time': 5, 'modem_down': 0, 'router_down': 0}, '06/04/20': {'packet_loss': 0, 'round_trip_time': 7, 'modem_down': 0, 'router_down': 0}, '06/05/20': {'packet_loss': 0, 'round_trip_time': 1, 'modem_down': 0, 'router_down': 0}, '06/06/20': {'packet_loss': 0, 'round_trip_time': 2, 'modem_down': 0, 'router_down': 0}, '06/07/20': {'packet_loss': 0, 'round_trip_time': 11, 'modem_down': 0, 'router_down': 0}, '06/08/20': {'packet_loss': 1, 'round_trip_time': 1, 'modem_down': 0, 'router_down': 0}, '06/10/20': {'packet_loss': 1, 'round_trip_time': 0, 'modem_down': 0, 'router_down': 0}, '06/11/20': {'packet_loss': 0, 'round_trip_time': 3, 'modem_down': 3, 'router_down': 0}, '06/15/20': {'packet_loss': 0, 'round_trip_time': 1, 'modem_down': 0, 'router_down': 0}, '06/16/20': {'packet_loss': 0, 'round_trip_time': 1, 'modem_down': 0, 'router_down': 0}, '06/19/20': {'packet_loss': 0, 'round_trip_time': 1, 'modem_down': 0, 'router_down': 0}, '06/21/20': {'packet_loss': 0, 'round_trip_time': 0, 'modem_down': 0, 'router_down': 933}, '06/23/20': {'packet_loss': 1, 'round_trip_time': 2, 'modem_down': 0, 'router_down': 878}, '06/24/20': {'packet_loss': 0, 'round_trip_time': 1, 'modem_down': 0, 'router_down': 505}}
 ```
+
+
+### Other Notes
+This program works by pinging two random hosts out of a list of hosts (currently comprised of www.apple.com, www.amazon.com, www.google.com). If there is no issue with the first host, we consider that a good result.  If there is any issue with the ping result, we ping the second host to double check that there isn't an issue with the first host.  If there is an issue with both hosts, we check the local router. Depending on the errors received from both hosts and the local router (if any), we log the most severe error. We deem the errors from most severe to least severe to be:
+1. An issue with the local router
+2. An issue with the modem or being unable to connect to the internet as a whole
+3. Packet loss
+4. High latency
+
